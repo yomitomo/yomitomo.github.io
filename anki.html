@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anki 처음 쓰기 — 요미토모</title>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1d2129; --muted: #5d6675; --line: #e3e6ea; --card: #f6f7f9;
+    --accent: #1b5e8f; --accent-soft: #eaf2fa; --ok: #1a7f37; --ok-soft: #e8f5ec; --warn: #9a6700; --warn-soft: #fff6dc;
+    --code: #eef1f5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #15171b; --fg: #ecedef; --muted: #a2a9b4; --line: #2c3037; --card: #1e2126; --accent: #6fb1ea; --accent-soft: #1d2a38;
+            --ok: #57c27a; --ok-soft: #17291d; --warn: #e3b341; --warn-soft: #2b2412; --code: #262a31; color-scheme: dark; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.75 -apple-system, "Apple SD Gothic Neo", "Hiragino Sans", "Noto Sans KR", "Noto Sans JP", sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 46rem; margin: 0 auto; padding: 28px 20px 60px; }
+  a { color: var(--accent); }
+  h1 { font-size: 30px; line-height: 1.3; margin: 0 0 8px; letter-spacing: -.3px; text-wrap: balance; }
+  .lead { color: var(--muted); font-size: 17px; margin: 0 0 20px; }
+  h2 { font-size: 22px; margin: 44px 0 12px; padding-top: 20px; border-top: 1px solid var(--line); text-wrap: balance; display: flex; align-items: baseline; gap: 10px; }
+  h2 .n { flex: none; display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: var(--bg); font-size: 15px; font-weight: 700; transform: translateY(-2px); }
+  h3 { font-size: 17px; margin: 22px 0 6px; }
+  p { margin: 8px 0; }
+  ol, ul { padding-left: 22px; margin: 8px 0; }
+  li { margin: 5px 0; }
+  code, kbd, .menu { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 14px; background: var(--code); border-radius: 5px; padding: 1px 6px; }
+  .menu { font-family: inherit; font-size: 15px; font-weight: 600; white-space: nowrap; }
+  kbd { border: 1px solid var(--line); border-bottom-width: 2px; }
+  .big-code { display: inline-block; font-size: 22px; letter-spacing: 2px; padding: 6px 14px; user-select: all; font-weight: 700; }
+  .toc { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; font-size: 15px; }
+  .toc ol { margin: 4px 0; columns: 2; column-gap: 28px; }
+  .toc li { break-inside: avoid; }
+  .box { border-radius: 12px; padding: 12px 16px; margin: 14px 0; font-size: 15px; }
+  .box.tip { background: var(--accent-soft); }
+  .box.ok { background: var(--ok-soft); }
+  .box.warn { background: var(--warn-soft); }
+  .box b:first-child { display: block; margin-bottom: 2px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 12px 0; }
+  .two > div { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; font-size: 15px; min-width: 0; }
+  .two h4 { margin: 0 0 4px; font-size: 15px; }
+  figure { margin: 14px 0; }
+  figure img { display: block; max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 10px; }
+  figcaption { font-size: 13px; color: var(--muted); margin-top: 6px; }
+  .shots { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; margin: 10px 0; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 13px; color: var(--muted); font-weight: 600; }
+  .tablewrap { overflow-x: auto; }
+  /* 카드 미리보기 (실제 Anki 카드와 같은 CSS) */
+  .preview { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 12px 0; }
+  .ankicard { border: 1px solid var(--line); border-radius: 10px; padding: 14px; background: #fff; color: #222; text-align: center; font-family: "Hiragino Sans", "Apple SD Gothic Neo", "Noto Sans JP", "Noto Sans KR", sans-serif; min-width: 0; }
+  .ankicard .side { font-size: 11px; color: #999; text-align: left; margin-bottom: 4px; }
+  .ankicard .word { font-size: 34px; margin: 6px 0; }
+  .ankicard .reading { font-size: 15px; color: #667; }
+  .ankicard .meaning { font-size: 18px; margin: 6px 0 10px; }
+  .ankicard .sent { font-size: 13px; color: #555; line-height: 1.7; }
+  .ankicard .sent b { color: #1f6feb; }
+  .ankicard .src { font-size: 11px; color: #999; margin-top: 8px; }
+  .ankicard .lv { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 4px; background: #eef2f7; color: #345; }
+  .ankicard hr { border: 0; border-top: 1px solid #ddd; margin: 10px 0; }
+  .grades { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin: 10px 0; }
+  .grades span { border: 1px solid var(--line); border-radius: 8px; padding: 4px 10px; font-size: 14px; background: var(--card); }
+  .grades span small { color: var(--muted); margin-left: 4px; }
+  details { border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; margin: 8px 0; background: var(--card); }
+  summary { cursor: pointer; font-weight: 600; }
+  details p, details ol, details ul { font-size: 15px; }
+  footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+  @media (max-width: 640px) {
+    .two, .shots, .preview { grid-template-columns: 1fr; }
+    .toc ol { columns: 1; }
+    h1 { font-size: 25px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Anki 처음 쓰기</h1>
+  <p class="lead">Anki 가 뭔지부터 설치, 요미토모와 연결, 컴퓨터와 폰에서 복습하기까지 순서대로 안내합니다. 처음이라면 15분쯤 걸려요. 전부 무료입니다(아이폰 앱만 예외, 아래 6번).</p>
+
+  <nav class="toc" aria-label="차례">
+    <b>차례</b>
+    <ol>
+      <li><a href="#what">Anki 가 뭔가요?</a></li>
+      <li><a href="#install">Anki 설치하기</a></li>
+      <li><a href="#connect-addon">AnkiConnect 깔기</a></li>
+      <li><a href="#link">요미토모와 연결하기</a></li>
+      <li><a href="#study">Anki 로 복습하기</a></li>
+      <li><a href="#phone">폰에서 복습하기</a></li>
+      <li><a href="#file">AnkiConnect 없이 파일로</a></li>
+      <li><a href="#trouble">안 될 때</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="what"><span class="n">1</span>Anki 가 뭔가요?</h2>
+  <p><b>Anki(안키)</b>는 단어장을 「카드」로 만들어 외우게 도와주는 무료 프로그램입니다. 전 세계 외국어·의대 공부하는 사람들이 많이 써요.</p>
+  <p>핵심은 <b>간격 반복</b>이에요. 카드를 보고 기억났는지 스스로 답하면, Anki 가 다음에 그 카드를 언제 다시 보여 줄지 정합니다. 잘 아는 카드는 며칠 → 몇 주 → 몇 달 뒤로 점점 멀리, 헷갈린 카드는 금방 다시. 그래서 매일 10~20분만 해도 외운 단어가 오래 남습니다.</p>
+
+  <h3>알아 둘 말 네 개</h3>
+  <div class="tablewrap"><table>
+    <tr><th>말</th><th>뜻</th><th>요미토모에서는</th></tr>
+    <tr><td><b>카드</b></td><td>앞면(문제)과 뒷면(답)이 있는 한 장</td><td>앞면: 단어만 / 뒷면: 읽기·뜻·급수·예문·읽던 문장</td></tr>
+    <tr><td><b>덱</b></td><td>카드를 모아 둔 묶음(폴더 같은 것)</td><td>「요미토모」 덱에 들어감 (이름은 바꿀 수 있음)</td></tr>
+    <tr><td><b>확장 프로그램</b></td><td>Anki 에 기능을 더하는 무료 추가 기능 (영어로 add-on)</td><td>「AnkiConnect」를 하나 깔아야 요미토모가 카드를 넣을 수 있음</td></tr>
+    <tr><td><b>동기화</b></td><td>컴퓨터와 폰의 카드·기록을 맞추는 것 (무료 AnkiWeb 계정)</td><td>컴퓨터로 넣은 카드를 폰에서 복습할 때 씀</td></tr>
+  </table></div>
+
+  <h3>꼭 Anki 를 써야 하나요?</h3>
+  <div class="two">
+    <div><h4>요미토모 「복습」 탭으로 충분한 사람</h4>
+      <ul><li>컴퓨터 앞에서만 공부함</li><li>프로그램을 더 깔기 싫음</li><li>요미토모로 모은 단어만 외움</li></ul>
+      <p>→ 확장 아이콘 → 「복습」 탭. Anki 는 안 깔아도 됩니다.</p></div>
+    <div><h4>Anki 를 같이 쓰면 좋은 사람</h4>
+      <ul><li><b>폰에서</b> 출퇴근길에 복습하고 싶음</li><li>이미 Anki 로 공부 중임</li><li>다른 사람이 만든 덱(JLPT 단어장 등)도 같이 쓰고 싶음</li></ul>
+      <p>→ 아래 2~6번을 따라 하세요.</p></div>
+  </div>
+
+  <h2 id="install"><span class="n">2</span>Anki 설치하기 (컴퓨터)</h2>
+  <p>요미토모와 연결하려면 <b>컴퓨터용 Anki</b>가 필요합니다. 공식 사이트 <a href="https://apps.ankiweb.net/" target="_blank" rel="noopener">apps.ankiweb.net</a> 에서만 받으세요. 무료입니다. 검색 광고에 나오는 비슷한 이름의 유료 앱은 공식이 아니에요.</p>
+
+  <h3>맥</h3>
+  <ol>
+    <li>내 맥이 어떤 칩인지 확인: 화면 왼쪽 위  → <span class="menu">이 Mac에 관하여</span> → 「칩」이 <b>Apple M…</b> 이면 <b>Apple Silicon</b>, 「프로세서」가 <b>Intel</b> 이면 Intel.</li>
+    <li>apps.ankiweb.net 에서 macOS 의 맞는 쪽(Apple Silicon 또는 Intel)을 눌러 내려받기 (.dmg 파일).</li>
+    <li>받은 파일을 열고, 나오는 창에서 Anki 아이콘을 <b>응용 프로그램(Applications)</b> 폴더로 끌어다 놓기.</li>
+    <li>응용 프로그램 폴더에서 Anki 를 더블클릭해 실행.</li>
+  </ol>
+
+  <h3>윈도우</h3>
+  <ol>
+    <li>apps.ankiweb.net 에서 Windows 의 <b>x64</b> 를 눌러 내려받기 (대부분의 PC. ARM 노트북이면 ARM).</li>
+    <li>받은 설치 파일을 실행하고 「다음」을 눌러 설치.</li>
+    <li>시작 메뉴에서 Anki 실행.</li>
+  </ol>
+
+  <div class="box tip"><b>처음 켜면</b>언어를 고르는 창이 나옵니다. <b>한국어</b>를 고르세요. 이 안내의 메뉴 이름은 한국어 화면 기준입니다. 이미 영어로 켰다면 <span class="menu">Tools → Preferences</span> 에서 바꿀 수 있어요.</div>
+
+  <h2 id="connect-addon"><span class="n">3</span>AnkiConnect 깔기 (처음 한 번)</h2>
+  <p>AnkiConnect 는 다른 프로그램이 Anki 에 카드를 넣을 수 있게 해 주는 무료 확장 프로그램입니다. 요미토모 말고도 일본어 공부 도구들이 널리 씁니다.</p>
+  <div class="box tip"><b>어디서 까나요? 웹사이트가 아니라 Anki 프로그램 안에서요</b>따로 내려받을 파일은 없어요. Anki 메뉴에 숫자 코드를 넣으면 Anki 가 알아서 받아 깝니다.<br>
+    <b>맥:</b> 메뉴는 Anki 창 안이 아니라 <b>화면 맨 위 막대</b>(사과 모양 옆)에 있어요. Anki 창을 한 번 눌러 두면 그 막대가 <span class="menu">Anki</span> <span class="menu">파일</span> <span class="menu">편집</span> <span class="menu">보기</span> <span class="menu">도구</span> <span class="menu">도움말</span> 로 바뀝니다.<br>
+    <b>윈도우:</b> Anki 창 맨 위 줄에 같은 메뉴가 있어요.</div>
+  <ol>
+    <li>그 메뉴에서 <span class="menu">도구</span> 를 누르고 → <span class="menu">확장 프로그램</span> 을 고름.</li>
+    <li>열린 창에서 <span class="menu">확장 프로그램 가져오기...</span> 를 누름.</li>
+    <li>「코드:」 칸에 아래 숫자를 붙여 넣고 확인.<br><span class="big-code">2055492159</span><br><small>(숫자를 누르면 한 번에 선택돼요. 복사해서 붙여 넣으세요.)</small></li>
+    <li>목록에 <b>AnkiConnect</b> 가 생기면 <b>Anki 를 완전히 껐다가 다시 켭니다.</b> (맥: <kbd>⌘</kbd>+<kbd>Q</kbd> 로 끄기)</li>
+  </ol>
+  <div class="box ok"><b>잘 깔렸는지 보는 법</b>Anki 를 켠 채로 크롬 주소창에 <code>http://127.0.0.1:8765</code> 를 쳐서 「AnkiConnect」라는 글자가 보이면 성공입니다. 이 주소는 「내 컴퓨터 자신」을 뜻해요. 인터넷으로 나가지 않습니다.</div>
+
+  <h2 id="link"><span class="n">4</span>요미토모와 연결하기</h2>
+  <ol>
+    <li><b>Anki 를 켜 둔 채로</b>, 크롬 오른쪽 위 요미토모 아이콘 → 창 오른쪽 위 <b>⚙</b>.</li>
+    <li>「Anki 바로 보내기」 줄의 <b>연결</b> 을 누릅니다.</li>
+    <li>크롬이 「127.0.0.1 에 접근 허용?」을 물으면 <b>허용</b>. (Anki 와 이야기하려면 필요한, 이 컴퓨터 안의 주소예요.)</li>
+    <li><b>Anki 창</b>에 요미토모를 허용할지 묻는 창이 뜨면 <b>Yes</b>. 창이 안 보이면 Anki 가 다른 창 뒤에 있을 수 있어요(Dock·작업 표시줄의 Anki 아이콘 클릭).</li>
+    <li>요미토모에 <b>연결됨</b> 이 뜨면 끝. Anki 에 「요미토모」 덱과 「요미토모 단어」 카드 종류가 생깁니다.</li>
+  </ol>
+  <div class="shots">
+    <figure><img src="anki-settings-off.png" alt="요미토모 설정의 Anki 바로 보내기: 연결 안 됨" width="380" height="400"><figcaption>연결 전: 「연결」을 누름</figcaption></figure>
+    <figure><img src="anki-settings-on.png" alt="요미토모 설정의 Anki 바로 보내기: 연결됨" width="380" height="330"><figcaption>연결 후: 「연결됨」, 저장할 때 바로 넣기가 켜짐</figcaption></figure>
+  </div>
+
+  <h3>이제 이렇게 씁니다</h3>
+  <ul>
+    <li>일본어 페이지에서 단어에 마우스를 올리고 <b>☆</b> (또는 <kbd>S</kbd>) → 요미토모에 저장되면서 <b>Anki 덱에도 카드가 바로 들어갑니다.</b> 팝업에 「Anki 에도 넣었어요」가 잠깐 떠요.</li>
+    <li><b>Anki 가 꺼져 있었다면</b> 「Anki 가 꺼져 있어요」가 뜨고 요미토모에만 저장됩니다. 나중에 Anki 를 켜고 요미토모 창 위의 <b>Anki로 (숫자)</b> 버튼을 누르면 한꺼번에 들어가요.</li>
+    <li>보낸 단어에는 목록에 <span style="color:var(--ok);font-weight:600">Anki ✓</span> 가 붙습니다. 같은 덱에 이미 있는 단어는 두 번 넣지 않아요.</li>
+    <li>「☆ 저장할 때 Anki 에도 넣기」를 끄면, 모았다가 원할 때만 「Anki로」 버튼으로 보낼 수 있어요.</li>
+  </ul>
+  <figure><img src="anki-list.png" alt="저장 목록: Anki로 버튼과 Anki 체크 표시" width="380" height="330"><figcaption>위의 「Anki로 (3)」: 아직 안 보낸 단어 3개. 「避難」 아래 「Anki ✓」: 이미 보낸 단어</figcaption></figure>
+
+  <h3>Anki 에 들어가는 카드 모양</h3>
+  <div class="preview">
+    <div class="ankicard"><div class="side">앞면</div><div class="word">避難</div></div>
+    <div class="ankicard"><div class="side">뒷면</div><div class="word">避難</div><div class="reading">ひなん <span class="lv">N1</span></div><div class="meaning">피난, 대피</div><div class="sent">彼は雨を避ける<b>避難</b>場所を捜した。<br>그는 비를 피할 곳을 찾았다.</div><div class="sent">自治体は<b>避難</b>情報を確認し、早めに安全な場所へ移動するよう呼びかけました。</div><div class="src">NHK NEWS WEB</div></div>
+  </div>
+  <p>앞면에서 단어만 보고 읽기·뜻을 떠올린 뒤, 뒤집어서 맞혔는지 확인하는 방식이에요. 뒷면에는 사전 예문(한국어 번역)과 그 단어를 처음 만났던 문장이 나와요. 기사 문장이 길면 단어 앞뒤만 짧게 줄여서 보여 줍니다.</p>
+
+  <h2 id="study"><span class="n">5</span>Anki 로 복습하기</h2>
+  <ol>
+    <li>Anki 첫 화면의 덱 목록에서 <b>요미토모</b> 를 누름.</li>
+    <li><span class="menu">공부 시작</span> 을 누르면 카드 앞면이 나옵니다.</li>
+    <li>읽기와 뜻을 떠올려 본 뒤 <span class="menu">정답 보기</span> (또는 <kbd>Space</kbd>).</li>
+    <li>얼마나 잘 기억했는지 네 버튼 중 하나를 누릅니다. 버튼 위에 다음에 다시 볼 때까지의 시간이 적혀 있어요.</li>
+  </ol>
+  <div class="grades"><span>다시<small>1</small></span><span>어려움<small>2</small></span><span>알맞음<small>3 · Space</small></span><span>쉬움<small>4</small></span></div>
+  <ul>
+    <li><b>다시</b>: 기억 안 남 → 몇 분 뒤 또 나옴</li>
+    <li><b>어려움</b>: 겨우 떠올림 → 조금만 뒤에</li>
+    <li><b>알맞음</b>: 떠올림 → 보통 간격 (대부분 이걸 누르게 됩니다)</li>
+    <li><b>쉬움</b>: 너무 쉬움 → 훨씬 뒤에</li>
+  </ul>
+  <div class="box tip"><b>요령</b>매일 조금씩이 핵심이에요. 밀린 카드가 쌓이면 부담이 커지니 하루 10~20분을 정해 두세요. 새 카드가 하루에 몇 장씩 나오는지는 덱 이름 옆 ⚙ → <span class="menu">옵션</span>(Options) 에서 바꿀 수 있습니다(처음엔 기본값 그대로 두는 걸 추천).</div>
+
+  <h2 id="phone"><span class="n">6</span>폰에서 복습하기</h2>
+  <p>컴퓨터 Anki 에 들어간 카드를 폰으로 옮기려면 무료 <b>AnkiWeb</b> 계정으로 동기화합니다.</p>
+  <ol>
+    <li><a href="https://ankiweb.net/" target="_blank" rel="noopener">ankiweb.net</a> 에서 무료 계정 만들기 (이메일·비밀번호).</li>
+    <li>컴퓨터 Anki 첫 화면 오른쪽 위의 <span class="menu">동기화</span> 버튼(또는 <kbd>Y</kbd>) → AnkiWeb 이메일·비밀번호 입력.</li>
+    <li>처음 한 번 어느 쪽을 남길지 물으면, 컴퓨터에 카드가 있고 AnkiWeb 은 비어 있으니 <b>업로드</b>.</li>
+    <li>폰에 Anki 앱을 깔고 같은 계정으로 로그인 → 동기화.</li>
+  </ol>
+  <div class="two">
+    <div><h4>안드로이드: AnkiDroid</h4><p>무료. 구글 플레이에서 「AnkiDroid」.</p></div>
+    <div><h4>아이폰·아이패드: AnkiMobile</h4><p>유료(약 25달러, 나라마다 다름). Anki 를 만든 곳에서 파는 공식 앱이고, 이 돈이 Anki 개발비로 쓰입니다. 요미토모와는 관계없어요. 아이폰에서는 동기화 없이 AnkiWeb 사이트에서 브라우저로 복습할 수도 있습니다.</p></div>
+  </div>
+  <div class="box warn"><b>알아 둘 것</b>요미토모는 <b>컴퓨터의 Anki</b> 로만 카드를 넣을 수 있어요. 흐름은 「크롬에서 ☆ → 컴퓨터 Anki → 동기화 → 폰」입니다. 동기화는 Anki 를 켜고 끌 때 자동으로도 됩니다. 6개월 넘게 동기화하지 않은 AnkiWeb 계정은 정리될 수 있으니 가끔 동기화해 주세요.</div>
+
+  <h2 id="file"><span class="n">7</span>AnkiConnect 없이 파일로 넣기</h2>
+  <p>확장 프로그램을 깔기 싫거나 회사 컴퓨터라 안 될 때는 파일로 옮길 수 있어요.</p>
+  <ol>
+    <li>요미토모 창 위의 <b>파일</b> 버튼 → <code>요미토모_단어_날짜.tsv</code> 가 다운로드 폴더에 저장됨.</li>
+    <li>Anki 에서 <span class="menu">파일</span> → <span class="menu">가져오기...</span> → 그 파일 선택.</li>
+    <li>노트 유형은 「기본(Basic)」, 덱은 원하는 것으로 고르고 <b>가져오기</b>.</li>
+  </ol>
+  <p>이 방법은 매번 직접 해야 하고, 같은 단어를 두 번 가져오면 중복될 수 있어요. 자주 쓴다면 3번의 AnkiConnect 를 추천합니다.</p>
+
+  <h2 id="trouble"><span class="n">8</span>안 될 때</h2>
+  <details><summary>「Anki 가 꺼져 있거나 AnkiConnect 가 없어요」가 떠요</summary>
+    <ol><li>컴퓨터에서 Anki 가 켜져 있는지 확인하세요(창을 닫아도 꺼진 건 아닐 수 있지만, 완전히 끄면 안 됩니다).</li>
+    <li><span class="menu">도구</span> → <span class="menu">확장 프로그램</span> 목록에 AnkiConnect 가 있는지 확인. 없으면 3번을 다시.</li>
+    <li>방금 깔았다면 Anki 를 완전히 껐다 켜기.</li>
+    <li>3번의 「잘 깔렸는지 보는 법」 주소가 열리는지 확인.</li></ol></details>
+  <details><summary>「연결」을 눌렀는데 Anki 에 질문 창이 안 떠요</summary>
+    <p>Anki 창이 다른 창 뒤에 가려져 있는 경우가 많아요. Dock(맥)이나 작업 표시줄(윈도우)의 Anki 아이콘을 눌러 앞으로 가져온 뒤 확인해 보세요.</p></details>
+  <details><summary>실수로 Anki 창에서 「No」를 눌렀어요</summary>
+    <p>요미토모에서 「연결」을 다시 누르면 보통 다시 물어봅니다. 다시 안 묻는다면 「다시 묻지 않기」를 고른 경우예요.
+    Anki 에서 <span class="menu">도구</span> → <span class="menu">확장 프로그램</span> → AnkiConnect 선택 → <span class="menu">설정</span> 을 열고,
+    <code>ignoreOriginList</code> 안에 있는 <code>chrome-extension://…</code> 줄을 지운 뒤 저장 → Anki 다시 켜기 → 「연결」.</p></details>
+  <details><summary>맥에서 Anki 를 뒤에 오래 두면 보내기가 느리거나 실패해요</summary>
+    <p>맥은 화면에 안 보이는 프로그램을 잠재워 전기를 아낍니다(App Nap). Anki 창을 한 번 앞으로 가져오면 다시 빨라져요.
+    매번 그렇다면, 터미널에서 아래 한 줄을 실행하고 Anki 를 다시 켜면 Anki 가 잠들지 않습니다.</p>
+    <p><code style="user-select:all">defaults write net.ankiweb.dtop NSAppSleepDisabled -bool true</code></p></details>
+  <details><summary>☆ 를 눌렀는데 Anki 에 안 들어갔어요</summary>
+    <ul><li>설정의 「☆ 저장할 때 Anki 에도 넣기」가 켜져 있는지 확인.</li>
+    <li>같은 덱에 이미 같은 단어 카드가 있으면 두 번 넣지 않아요(목록에는 Anki ✓ 로 표시).</li>
+    <li>Anki 가 꺼져 있었다면 요미토모 창 위 「Anki로」 버튼으로 다시 보내세요.</li></ul></details>
+  <details><summary>요미토모에서 저장을 취소하면 Anki 카드도 지워지나요?</summary>
+    <p>아니요. Anki 에 들어간 카드는 Anki 에서 직접 지워야 합니다(공부 중 카드 화면 오른쪽 아래 버튼에서 노트 삭제, 또는 위쪽 메뉴의 찾아보기 창에서 삭제. 영어 화면: More → Delete Note / Browse). 실수로 공부 기록을 잃지 않게 일부러 그렇게 했어요.</p></details>
+  <details><summary>덱 이름을 바꾸거나, 일본어 덱 안에 넣고 싶어요</summary>
+    <p>요미토모 설정의 「넣을 덱」에 원하는 이름을 쓰세요. <code>일본어::요미토모</code> 처럼 <code>::</code> 를 쓰면 「일본어」 덱 안의 「요미토모」 덱이 됩니다. 이미 넣은 카드는 Anki 에서 덱을 옮겨야 해요.</p></details>
+  <details><summary>카드 글자 크기나 모양을 바꾸고 싶어요</summary>
+    <p>Anki 의 <span class="menu">도구</span> → 노트 유형 관리(Manage Note Types) → 「요미토모 단어」 → 카드(Cards) 에서 바꿀 수 있어요. 잘 모르겠다면 그대로 두는 게 안전합니다.</p></details>
+
+  <div class="box ok" style="margin-top:28px"><b>개인정보</b>요미토모와 Anki 사이의 통신은 <b>같은 컴퓨터 안</b>(127.0.0.1)에서만 일어나고, 요미토모는 인터넷으로 단어를 보내지 않습니다. AnkiWeb 동기화를 켜면 그때부터는 Anki 가 카드를 AnkiWeb 에 올립니다(Anki 의 정책을 따름).</div>
+
+  <footer>
+    요미토모 (読み友) · Anki 는 Ankitects 의 무료 프로그램이며 요미토모와 별개입니다. AnkiConnect 는 FooSoft 의 무료 확장 프로그램입니다.<br>
+    메뉴 이름은 Anki 버전에 따라 조금 다를 수 있어요. 안내가 화면과 다르면 알려 주세요: yomitomo.help@gmail.com
+  </footer>
+</main>
+</body>
+</html>
