@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://yomitomo.github.io/</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yomitomo.github.io/?lang=ko"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yomitomo.github.io/?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://yomitomo.github.io/?lang=zh"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yomitomo.github.io/"/>
+  </url>
+  <url>
+    <loc>https://yomitomo.github.io/?lang=ko</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yomitomo.github.io/?lang=ko"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yomitomo.github.io/?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://yomitomo.github.io/?lang=zh"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yomitomo.github.io/"/>
+  </url>
+  <url>
+    <loc>https://yomitomo.github.io/?lang=en</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yomitomo.github.io/?lang=ko"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yomitomo.github.io/?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://yomitomo.github.io/?lang=zh"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yomitomo.github.io/"/>
+  </url>
+  <url>
+    <loc>https://yomitomo.github.io/?lang=zh</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yomitomo.github.io/?lang=ko"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yomitomo.github.io/?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://yomitomo.github.io/?lang=zh"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yomitomo.github.io/"/>
+  </url>
+  <url>
+    <loc>https://yomitomo.github.io/anki.html</loc>
+  </url>
+  <url>
+    <loc>https://yomitomo.github.io/privacy.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yomitomo.github.io/privacy.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yomitomo.github.io/privacy-en.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://yomitomo.github.io/privacy-zh.html"/>
+  </url>
+  <url>
+    <loc>https://yomitomo.github.io/privacy-en.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yomitomo.github.io/privacy.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yomitomo.github.io/privacy-en.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://yomitomo.github.io/privacy-zh.html"/>
+  </url>
+  <url>
+    <loc>https://yomitomo.github.io/privacy-zh.html</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://yomitomo.github.io/privacy.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yomitomo.github.io/privacy-en.html"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hant" href="https://yomitomo.github.io/privacy-zh.html"/>
+  </url>
+</urlset>
